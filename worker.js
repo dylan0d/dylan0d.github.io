@@ -9,11 +9,11 @@ onmessage = function(event) {
       links = event.data.links;
 
   var simulation = d3.forceSimulation(nodes)
-      .force("charge", d3.forceManyBody())
-      .force("link", d3.forceLink(links).distance(20).strength(1))
-      .force("x", d3.forceX())
-      .force("y", d3.forceY())
-      .stop();
+        .force("link", d3.forceLink().distance(null).strength(function(d) { return d.weight/20 }))
+        .force("charge", d3.forceManyBody().strength(-80).distanceMax(100))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(function(d) { return d.radius*2 }))
+        .alphaMin(0.2)
 
   for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
     postMessage({type: "tick", progress: i / n});
