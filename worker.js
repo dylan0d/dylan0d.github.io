@@ -8,6 +8,9 @@ onmessage = function(event) {
   var nodes = event.data.nodes,
       links = event.data.links;
 
+width = 1700
+height = 1000
+
   var simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink().distance(null).strength(function(d) { return d.weight/20 }))
         .force("charge", d3.forceManyBody().strength(-80).distanceMax(100))
