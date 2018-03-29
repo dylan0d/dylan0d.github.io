@@ -1,0 +1,151 @@
+<meta charset="utf-8">
+<div id="progress"></div>
+<svg width="1200" height="800"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+
+<script>
+
+    var xscale = d3.scaleLinear()
+        .domain([150, 790])
+        .range([250, 1200]);
+    
+    var yscale = d3.scaleLinear()
+        .domain([200,650])
+        .range([100,1000])
+    
+    var meter = document.querySelector("#progress")
+    var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+    var color = d3.scaleSequential(d3.interpolateSpectral);
+
+    var worker = new Worker("worker.js");
+
+d3.json("https://dylan0d.github.io/links2016.json", function(error, graph) {
+  if (error) throw error;
+
+
+worker.postMessage({
+  nodes: graph.nodes,
+  links: graph.links
+});
+
+worker.onmessage = function(event) {
+  switch (event.data.type) {
+    case "tick": return ticked(event.data);
+    case "end": return ended(event.data, graph.themes);
+  }
+};
+
+function ticked(data) {
+  var progress = data.progress;
+
+  meter.style.width = 100 * progress + "%";
+}
+
+function ended(data, themes) {
+  var nodes = data.nodes,
+      links = data.links;
+    
+    console.log(links)
+
+  var link = svg.append("g")
+      .attr("class", "links")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+      //.attr("stroke-width", function(d) { return Math.sqrt(d.weight); })
+      .attr("stroke-opacity", function(d) { return Math.sqrt(d.weight)/10; })
+      .attr("stroke", "black");
+    var square_offset = 0.0,
+    color_offset = 0.0,
+    square_dimension = 600/themes.length
+
+    var legend = svg.append("g")
+        .attr("class", "legend")
+    .selectAll("square")
+    .data(themes).enter().append('rect')
+        .attr('x', 10)
+        .attr('y', function(d) { square_offset+=1; return ((square_offset-1)*square_dimension*1.05)})
+        .attr('width', square_dimension)
+        .attr('height', square_dimension)
+        .style("fill", function(d) { return(color(d.id/650))})
+    
+    square_offset = 0.0
+    var legend_text = svg.append('g')
+        .attr("class", "legend")
+    .selectAll("square")
+    .data(themes).enter().append('text')
+    .text( function(d) { return d.name })
+    .attr('x', 15+square_dimension)
+    .attr('y', function(d) { square_offset+=1; return ((square_offset-1)*square_dimension*1.05)+square_dimension*0.8})
+
+
+  var node = svg.append("g")
+      .attr("class", "nodes")
+    .selectAll("circle")
+    .data(nodes)
+    .enter().append("circle")
+    .attr("r", 5)
+    .attr("fill", function(d) { return color(d.theme/650); })
+    .attr("cx", function(d) { return xscale(d.x); })
+    .attr("cy", function(d) { return yscale(d.y); });
+
+    node.append("title")
+      .text(function(d) { return d.name+ ' || ' + d.theme_name + ' || ' + d.id; });   
+
+    link
+        .attr("x1", function(d) { return xscale(d.source.x); })
+        .attr("y1", function(d) { return yscale(d.source.y); })
+        .attr("x2", function(d) { return xscale(d.target.x); })
+        .attr("y2", function(d) { return yscale(d.target.y); });
+
+    // link
+    //     .attr("x1", function(d) { return d.source.x; })
+    //     .attr("y1", function(d) { return d.source.y; })
+    //     .attr("x2", function(d) { return d.target.x; })
+    //     .attr("y2", function(d) { return d.target.y; });
+
+}
+
+});
+
+</script>
+
+<style>
+
+    #progress {
+        position: fixed;
+        top: 0;
+        left: -6px;
+        width: 0%;
+        height: 2px;
+        background: red;
+    }
+    
+    #progress:before,
+    #progress:after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        opacity: 0.6;
+        box-shadow: red 1px 0 6px 1px;
+        border-radius: 100%;
+    }
+    
+    #progress:before {
+        width: 20px;
+        right: 0;
+        clip: rect(-6px, 22px, 14px, 10px);
+    }
+    
+    #progress:after {
+        width: 180px;
+        right: -80px;
+        clip: rect(-6px, 90px, 14px, -6px);
+    }
+        
+</style>
