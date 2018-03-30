@@ -13,7 +13,7 @@ height = 660
 
     var simulation = d3.forceSimulation(nodes)
         .force("charge", d3.forceManyBody().strength(-80).distanceMax(100))
-        .force("link", d3.forceLink(links).distance(20).strength(function(d) { return d.weight/20 }))
+        .force("link", d3.forceLink(links).id(function(d) { return d.id; }).distance(20).strength(function(d) { return d.weight/20 }))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(height / 2))
         .stop();
