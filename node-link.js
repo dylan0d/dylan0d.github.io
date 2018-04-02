@@ -29,8 +29,14 @@ var xscale = d3.scaleLinear()
 d3.json("links2016.json", function(error, graph) {
     if (error) throw error;
     var exclusion_list = []
+    var theme_ids = []
 
     themes = graph.themes
+
+    themes.forEach(function(theme) {
+        theme_ids.push(theme.id)
+    })
+
     square_dimension = 500/themes.length
 
     var legend = svg.append("g")
@@ -43,12 +49,12 @@ d3.json("links2016.json", function(error, graph) {
         .attr('y', function(d, i) { return ((i+1)*square_dimension*1.1)})
         .attr('width', square_dimension)
         .attr('height', square_dimension)
-        .style("fill", function(d) { return(color(d.id/650))})
-        .style("stroke", function(d) { return(color(d.id/650))})
+        .style("fill", function(d) { return(color(theme_ids.indexOf(d.id)/theme_ids.length))})
+        .style("stroke", function(d) { return(color(theme_ids.indexOf(d.id)/theme_ids.length))})
         .on("click", function(d){
             var nextColor = 'white';
             if (this.style.fill == "white"){
-                nextColor = color(d.id/650);
+                nextColor = color(theme_ids.indexOf(d.id)/theme_ids.length);
                 var index = exclusion_list.indexOf(d.id);
                 exclusion_list.splice(index, 1);
             }
@@ -163,9 +169,10 @@ d3.json("links2016.json", function(error, graph) {
             .data(nodes)
             .enter().append("circle")
                 .attr("r", 5)
-                .attr("fill", function(d) { return color(d.theme/650); })
+                .attr("fill", function(d) { return color(theme_ids.indexOf(d.theme)/theme_ids.length); })
                 .attr("cx", function(d) { return xscale(d.x); })
                 .attr("cy", function(d) { return yscale(d.y); })
+                .style("stroke", "black")
             .append("title")
                 .text(function(d) { return d.name+ ' || ' + d.theme_name + ' || ' + d.id; })
         
