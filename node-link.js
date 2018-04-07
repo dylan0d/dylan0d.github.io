@@ -1,30 +1,29 @@
+var width = 1200,
+height = 660;
+margin = 10
+
 var xscale = d3.scaleLinear()
-        .domain([150, 790])
-        .range([250, 1200]);
+    .range([250, width-margin]);
+
+var yscale = d3.scaleLinear()
+    .range([margin,height-margin])
+
+var meter = document.querySelector("#progress")
+var	svg = d3.select("body")
+.append("svg")
+    .attr("width", width)
+    .attr("height", height)
     
-    var yscale = d3.scaleLinear()
-        .domain([200,650])
-        .range([100,1000])
-
-    var width = 1200,
-    height = 660;
-    
-    var meter = document.querySelector("#progress")
-    var	svg = d3.select("body")
-	.append("svg")
-		.attr("width", width)
-        .attr("height", height)
-        
-    svg.append("text")
-        .attr('id', "load")
-        .text("Loading")
-        .attr('x', width/2)
-        .attr('y', height/2)
+svg.append("text")
+    .attr('id', "load")
+    .text("Loading")
+    .attr('x', width/2)
+    .attr('y', height/2)
 
 
-    var color = d3.scaleSequential(d3.interpolateSpectral);
+var color = d3.scaleSequential(d3.interpolateSpectral);
 
-    var worker = new Worker("worker.js");
+var worker = new Worker("worker.js");
 
 d3.json("links2016.json", function(error, graph) {
     if (error) throw error;
@@ -143,6 +142,17 @@ d3.json("links2016.json", function(error, graph) {
 
         var nodes = data.nodes,
             links = data.links;
+        
+        console.log(nodes[0])
+
+        var maxX = Math.max.apply(Math,nodes.map(function(o){return o.x;})),
+        minX = Math.min.apply(Math,nodes.map(function(o){return o.x;})),
+        maxY = Math.max.apply(Math,nodes.map(function(o){return o.y;})),
+        minY = Math.min.apply(Math,nodes.map(function(o){return o.y;}))
+
+        xscale.domain([minX, maxX])
+        yscale.domain([minY,maxY])
+        
         
         meter.style.display = "none";
         svg.select("#load").remove();

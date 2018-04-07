@@ -16,6 +16,7 @@ height = 660
         .force("link", d3.forceLink(links).id(function(d) { return d.id; }).distance(20).strength(function(d) { return d.weight/20 }))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("y", d3.forceY(height / 2))
+        .force("x", d3.forceY(width / 2))
         .stop();
 
 
