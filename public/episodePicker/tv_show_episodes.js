@@ -44,6 +44,12 @@ async function getTvShowDetails(id) {
   return showDetails
 }
 
+async function getEpisode(showId, season, episode) {
+  return httpsGet(
+    `tv/${showId}/season/${season}/episode/${episode}?api_key=${apiKey}&language=en-US`
+  )
+}
+
 async function pickAnEpisode() {
   const searchQuery = document.getElementById("searchInput").value;
   const tvShow = await getTvShow(searchQuery);
@@ -56,8 +62,24 @@ async function pickAnEpisode() {
     season = tvShowDetails.seasons[getRandomInt(0, numSeasons-1)]
   } while (season.name === 'Specials')
 
-  document.getElementById('poster').src = `https://image.tmdb.org/t/p/original/${season.poster_path}`
 
-  const choice = `You should watch season ${season.season_number} episode ${getRandomInt(1, season.episode_count)} of ${tvShow.name}`;
+  const episodeNumber = getRandomInt(1, season.episode_count)
+
+  const episode = await getEpisode(tvShow.id, season.season_number, episodeNumber)
+
+
+  document.getElementById('poster').src = `https://image.tmdb.org/t/p/original/${season.poster_path}`
+  document.getElementById('still').src = `https://image.tmdb.org/t/p/original/${episode.still_path}`
+
+  const choice = 
+  `You should watch ${tvShow.name} Season ${season.season_number} Episode ${episodeNumber} ${episode.name ? `- "${episode.name}" ` : ''}
+  <br>
+  It has a rating of ${episode.vote_average}, not sure where from
+  <br>
+  Original air date: ${new Date(episode.air_date).toLocaleString().split(',')[0]}
+  <br>
+  <br>
+  "${episode.overview}"
+  `;
   document.getElementById("episode").innerHTML = choice
 }
