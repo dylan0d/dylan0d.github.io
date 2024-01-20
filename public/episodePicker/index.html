@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <head>
     <Title>Episode Picker</Title>
-    <script src="tv_show_episodes.js"></script> 
+    <script src="tv_show_episodes.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<H1>
-    This is the episode picker
-</H1>
+<style>
+    .episodeDetail {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 5px;
+    }
+</style>
+<div style="text-align: center;">
+    <H1 id="title">
+        This is the episode picker
+    </H1>
+</div>
 
-<img src="" id="poster" style="height: 60vh;">
-<img src="" id="still" style="height: 60vh;">
+<div id="resultsBox" style="display: none; justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 10px; border-radius: 20px;">
+    <div style="max-width: 25%;">
+        <img src="" id="poster" style="width: 100%; border-radius: 20px;">
+    </div>
+    <div class="episodeDetail">
+        <div id="episodeTitle"></div>
+        <div id="episodeNumber"></div>
+        <div id="releaseDate"></div>
+    </div>
+    <div class="episodeDetail" style="max-width: 50%;">
+        <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
+        <div id="description" style="margin-bottom: 10px;"></div>
+    </div>
+</div>
+<div style="text-align: center;">
+    <div id="searchAgain"></div>
+    <div id="searchTool">
+        <input type="text" id="searchInput" value="">
+        <button onclick="pickAnEpisode()" id="searchButton">Search</button> 
+    </div>
+</div>
 
-<p id="episode"></p>
 
-<input type="text" id="searchInput" value="">
-
-<button onclick="pickAnEpisode()" id="searchButton">Search</button> 

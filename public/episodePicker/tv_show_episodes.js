@@ -7,6 +7,8 @@ let input;
 window.addEventListener('load', () => {
   // Get the input field
   input = document.getElementById("searchInput");
+  input.value = ''
+
   input.addEventListener("keypress", function(event) {
     // If the user presses the "Enter" key on the keyboard
     if (event.key === "Enter") {
@@ -17,6 +19,7 @@ window.addEventListener('load', () => {
     }
   });
 })
+
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -50,6 +53,7 @@ async function getEpisode(showId, season, episode) {
   )
 }
 
+// eslint-disable-next-line no-unused-vars
 async function pickAnEpisode() {
   const searchQuery = document.getElementById("searchInput").value;
   const tvShow = await getTvShow(searchQuery);
@@ -70,7 +74,7 @@ async function pickAnEpisode() {
 
   document.getElementById('poster').src = `https://image.tmdb.org/t/p/original/${season.poster_path}`
   document.getElementById('still').src = `https://image.tmdb.org/t/p/original/${episode.still_path}`
-
+  document.getElementById('title').innerHTML = 'Why not try...'
   const choice = 
   `You should watch ${tvShow.name} Season ${season.season_number} Episode ${episodeNumber} ${episode.name ? `- "${episode.name}" ` : ''}
   <br>
@@ -81,5 +85,10 @@ async function pickAnEpisode() {
   <br>
   "${episode.overview}"
   `;
-  document.getElementById("episode").innerHTML = choice
+  document.getElementById("episodeTitle").innerHTML = episode.name
+  document.getElementById("episodeNumber").innerHTML = `Season ${season.season_number} Episode ${episodeNumber}`
+  document.getElementById("releaseDate").innerHTML = `First aired: ${new Date(episode.air_date).toLocaleString().split(',')[0]}`
+  document.getElementById("description").innerHTML = episode.overview
+  document.getElementById("resultsBox").style.display = 'flex'
+  document.getElementById("searchAgain").innerHTML = "Don't like it? Try Again"
 }
