@@ -13,30 +13,35 @@
     }
 </style>
 <div style="text-align: center;">
-    <H1 id="title">
+    <H1 id="title" style="font-size: 64px">
         This is the episode picker
     </H1>
 </div>
 
-<div id="resultsBox" style="display: none; justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 10px; border-radius: 20px;">
-    <div style="max-width: 25%;">
-        <img src="" id="poster" style="width: 100%; border-radius: 20px;">
+<div style="font-size: 48px;">
+    <div id="resultsBox" style="display: none; flex-direction: column;justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 10px; border-radius: 20px;">
+        <div style="display: flex; flex-direction: row;">
+            <div style="max-width: 33%;">
+                <img src="" id="poster" style="width: 100%; border-radius: 20px;">
+            </div>
+            <div class="episodeDetail" style="margin-left: 10px;">
+                <div id="episodeTitle"></div>
+                <div id="episodeNumber"></div>
+                <div id="releaseDate"></div>
+                <div id="description"></div>
+    
+            </div>
+        </div>
+        <!-- <div class="episodeDetail" style="display: flex; flex-direction: row; max-width: 100%;"> -->
+            <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
+        <!-- </div> -->
     </div>
-    <div class="episodeDetail">
-        <div id="episodeTitle"></div>
-        <div id="episodeNumber"></div>
-        <div id="releaseDate"></div>
-    </div>
-    <div class="episodeDetail" style="max-width: 50%;">
-        <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
-        <div id="description" style="margin-bottom: 10px;"></div>
-    </div>
-</div>
-<div style="text-align: center;">
-    <div id="searchAgain"></div>
-    <div id="searchTool">
-        <input type="text" id="searchInput" value="">
-        <button onclick="pickAnEpisode()" id="searchButton">Search</button> 
+    <div style="text-align: center;">
+        <div id="searchAgain"></div>
+        <div id="searchTool">
+            <input style="font-size: 48px;" type="text" id="searchInput" value="">
+            <button style="font-size: 48px; min-height: 100%;" onclick="pickAnEpisode()" id="searchButton">Go!</button> 
+        </div>
     </div>
 </div>
 
