@@ -75,20 +75,10 @@ async function pickAnEpisode() {
   document.getElementById('poster').src = `https://image.tmdb.org/t/p/original/${season.poster_path}`
   document.getElementById('still').src = `https://image.tmdb.org/t/p/original/${episode.still_path}`
   document.getElementById('title').innerHTML = 'Why not try...'
-  const choice = 
-  `You should watch ${tvShow.name} Season ${season.season_number} Episode ${episodeNumber} ${episode.name ? `- "${episode.name}" ` : ''}
-  <br>
-  It has a rating of ${episode.vote_average}, not sure where from
-  <br>
-  Original air date: ${new Date(episode.air_date).toLocaleString().split(',')[0]}
-  <br>
-  <br>
-  "${episode.overview}"
-  `;
   document.getElementById("episodeTitle").innerHTML = episode.name
   document.getElementById("episodeNumber").innerHTML = `Season ${season.season_number} Episode ${episodeNumber}`
   document.getElementById("releaseDate").innerHTML = `First aired: ${new Date(episode.air_date).toLocaleString().split(',')[0]}`
   document.getElementById("description").innerHTML = episode.overview
-  document.getElementById("resultsBox").style.display = 'flex'
+  document.getElementById("resultsBox").style.display = 'block'
   document.getElementById("searchAgain").innerHTML = "Don't like it? Try Again"
 }

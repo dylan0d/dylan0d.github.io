@@ -4,14 +4,7 @@
     <script src="tv_show_episodes.js"></script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<style>
-    .episodeDetail {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        padding: 5px;
-    }
-</style>
+
 <div style="text-align: center;">
     <H1 id="title" style="font-size: 64px">
         This is the episode picker
@@ -19,27 +12,24 @@
 </div>
 
 <div style="font-size: 48px;">
-    <div id="resultsBox" style="display: none; flex-direction: column;justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 10px; border-radius: 20px;">
-        <div style="display: flex; flex-direction: row;">
-            <div style="max-width: 33%;">
+    <div id="resultsBox" style="display: none; justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 15px; border-radius: 20px;">
+        <div>
+            <div style="width: 33%; float:left; margin: 10px">
                 <img src="" id="poster" style="width: 100%; border-radius: 20px;">
             </div>
-            <div class="episodeDetail" style="margin-left: 10px;">
+            <div>
                 <div id="episodeTitle"></div>
                 <div id="episodeNumber"></div>
                 <div id="releaseDate"></div>
                 <div id="description"></div>
-    
             </div>
         </div>
-        <!-- <div class="episodeDetail" style="display: flex; flex-direction: row; max-width: 100%;"> -->
-            <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
-        <!-- </div> -->
+        <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
     </div>
     <div style="text-align: center;">
         <div id="searchAgain"></div>
-        <div id="searchTool">
-            <input style="font-size: 48px;" type="text" id="searchInput" value="">
+        <div id="searchTool" style="width: 100%;">
+            <input style="width: 85%; font-size: 48px;" type="text" id="searchInput" value="">
             <button style="font-size: 48px; min-height: 100%;" onclick="pickAnEpisode()" id="searchButton">Go!</button> 
         </div>
     </div>
