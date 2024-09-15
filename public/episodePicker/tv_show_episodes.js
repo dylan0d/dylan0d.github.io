@@ -1,9 +1,17 @@
-// const https = require('https');
 const apiKey = 'd3047d03e4482f136c84120d99bbafa3'
 const baseUrl = 'https://api.themoviedb.org/3/'
-
+const baseImageUrl = 'https://image.tmdb.org/t/p/original/'
+let showId = null;
 let input;
 
+const suggestion = /* html */`
+  <div onclick="clickedSuggestion(this)" id="$show_id" style="display: flex; outline: 3px solid aquamarine; margin: 7px; padding: 10px; border-radius: 20px;">
+  <img src="$show_poster" style="max-height: 100px; border-radius:10px">
+  <div>$show_title $show_year </div>
+  </div>
+  `
+  //<img src="$show_image" style="max-height: 100px">
+  
 window.addEventListener('load', () => {
   // Get the input field
   input = document.getElementById("searchInput");
@@ -20,7 +28,43 @@ window.addEventListener('load', () => {
   });
 })
 
+function debounce(callback, delay = 500) {
+  var time;
+  return (...args) => {
+    clearTimeout(time);
+    time = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+}
 
+function setSearchResults(matches) {
+  const suggestions = matches
+    .map(match => suggestion
+      .replace('$show_title', match.name)
+      .replace('$show_year', match.first_air_date ? `(${match.first_air_date.split('-')[0]})` : '')
+      .replace('$show_id', match.id)
+      .replace('$show_image', baseImageUrl + match.backdrop_path)
+      .replace('$show_poster', baseImageUrl + match.poster_path))
+  document.getElementById('searchSuggestions').innerHTML = suggestions.join('\n')
+}
+
+// eslint-disable-next-line no-unused-vars
+function clickedSuggestion(param) {
+  showId = param.id;
+  pickAnEpisode();
+}
+
+const showSuggestions = debounce(async (searchTerm) => {
+  const matches = await searchForTvShow(searchTerm);
+  setSearchResults(matches);
+})
+
+// eslint-disable-next-line no-unused-vars
+const processChange = () => {
+  const searchQuery = document.getElementById("searchInput").value;
+  showSuggestions(searchQuery)
+}
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -32,11 +76,11 @@ async function httpsGet(url) {
   return await response.json();
 }
 
-async function getTvShow(query) {
+async function searchForTvShow(query) {
   const searchResults = await httpsGet(
     `search/tv?api_key=${apiKey}&language=en-US&page=1&query=${query}&include_adult=false`
   )
-  return await searchResults.results[0];
+  return await searchResults.results;
 }
 
 async function getTvShowDetails(id) {
@@ -55,9 +99,7 @@ async function getEpisode(showId, season, episode) {
 
 // eslint-disable-next-line no-unused-vars
 async function pickAnEpisode() {
-  const searchQuery = document.getElementById("searchInput").value;
-  const tvShow = await getTvShow(searchQuery);
-  const tvShowDetails = await getTvShowDetails(tvShow.id);
+  const tvShowDetails = await getTvShowDetails(showId);
 
   const numSeasons = tvShowDetails.seasons.length
 
@@ -69,10 +111,10 @@ async function pickAnEpisode() {
 
   const episodeNumber = getRandomInt(1, season.episode_count)
 
-  const episode = await getEpisode(tvShow.id, season.season_number, episodeNumber)
+  const episode = await getEpisode(showId, season.season_number, episodeNumber)
 
-  document.getElementById('poster').src = `https://image.tmdb.org/t/p/original/${season.poster_path}`
-  document.getElementById('still').src = `https://image.tmdb.org/t/p/original/${episode.still_path}`
+  document.getElementById('poster').src = baseImageUrl + season.poster_path
+  document.getElementById('still').src = baseImageUrl + episode.still_path
   document.getElementById('title').innerHTML = 'Why not try...'
   document.getElementById("episodeTitle").innerHTML = episode.name
   document.getElementById("episodeNumber").innerHTML = `Season ${season.season_number} Episode ${episodeNumber}`
@@ -81,5 +123,8 @@ async function pickAnEpisode() {
 
   document.getElementById("description").innerHTML = episode.overview
   document.getElementById("resultsBox").style.display = 'block'
-  document.getElementById("searchAgain").innerHTML = "Don't like it? Try Again"
+  document.getElementById("searchAgain").style.display = 'block'
+  document.getElementById('searchSuggestions').innerHTML = ''
+  document.getElementById('searchInput').value=''
+
 }

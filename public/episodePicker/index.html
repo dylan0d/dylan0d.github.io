@@ -6,33 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 
-<div style="text-align: center;">
-    <H1 id="title" style="font-size: 48px">
-        This is the episode picker
-    </H1>
-</div>
-
-<div style="font-size: 16px;">
-    <div id="resultsBox" style="display: none; justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 15px; border-radius: 20px;">
-        <div style="margin-bottom: 10px;">
-            <div style="width: 40%; float:left; margin-right: 10px">
-                <img src="" id="poster" style="width: 100%; border-radius: 20px;">
-            </div>
-            <div>
-                <div id="episodeTitle"></div>
-                <div id="episodeNumber"></div>
-                <div id="releaseDate"></div>
-                <div id="description"></div>
-                <div id="rating"></div>
-            </div>
-        </div>
-        <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
-    </div>
+<div style="font-family: Arial, Helvetica, sans-serif">
     <div style="text-align: center;">
-        <div id="searchAgain"></div>
-        <div id="searchTool" style="width: 100%;">
-            <input style="width: 65%; font-size: 16px;" type="text" id="searchInput" value="">
-            <button style="width:30%; font-size: 16px; min-height: 100%;" onclick="pickAnEpisode()" id="searchButton">Go!</button> 
+        <H1 id="title" style="font-size: 48px">
+            This is the episode picker
+        </H1>
+    </div>
+
+    <div style="font-size: 16px;">
+        <div id="resultsBox" style="display: none; justify-content: space-around; outline: 3px solid aquamarine; margin: 10px; padding: 15px; border-radius: 20px;">
+            <div style="margin-bottom: 10px;">
+                <div style="width: 40%; float:left; margin-right: 10px">
+                    <img src="" id="poster" style="width: 100%; border-radius: 20px;">
+                </div>
+                <div>
+                    <div id="episodeTitle"></div>
+                    <div id="episodeNumber"></div>
+                    <div id="releaseDate"></div>
+                    <div id="description"></div>
+                    <div id="rating"></div>
+                </div>
+            </div>
+            <img src="" id="still" style="max-width: 100%; border-radius: 20px;">
+        </div>
+        <div style="text-align: center;">
+            <div id="searchAgain" style="display:none; margin:5px">
+                Not Happy?
+                <button onclick="pickAnEpisode()">Try Again</button>
+                Or search for a new show...
+            </div>
+            <div id="searchTool" style="width: 100%; margin:5px">
+                <input style="width: 80%; font-size: 16px;" type="text" id="searchInput" value="" placeholder="Type the name of a show to search" onkeyup="processChange()">
+            </div>
+            <div id="searchSuggestions"></div>
         </div>
     </div>
 </div>
